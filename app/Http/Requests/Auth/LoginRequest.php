@@ -28,7 +28,6 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        // 🔥 Buscar usuario por tu campo personalizado
         $user = \App\Models\User::where('correo_electronico', $this->input('correo_electronico'))->first();
 
         if (!$user) {
@@ -37,17 +36,14 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        // 🔥 Verificar contraseña (esto sí funciona con bcrypt)
         if (!password_verify($this->input('password'), $user->contrasena)) {
             throw ValidationException::withMessages([
                 'correo_electronico' => 'Contraseña incorrecta',
             ]);
         }
 
-        // 🔥 Logear usuario
         Auth::login($user);
 
-        // limpiar intentos
         RateLimiter::clear($this->throttleKey());
     }
 

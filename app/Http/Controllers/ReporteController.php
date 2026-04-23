@@ -21,7 +21,7 @@ class ReporteController extends Controller
             ->get();
 
         return view('reportes.index', compact('reportes'));
-    } // ← ESTA LLAVE FALTABA 😭
+    }
 
     public function store()
 {
@@ -43,7 +43,6 @@ class ReporteController extends Controller
     'fecha' => now()
 ]);
 
-    // guardar imagen en tabla imagen
     $idReporte = DB::getPdo()->lastInsertId();
 
     if ($rutaImagen) {

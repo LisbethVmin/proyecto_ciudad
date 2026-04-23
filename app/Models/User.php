@@ -33,7 +33,6 @@ class User extends Authenticatable
         return 'correo_electronico';
     }
 
-    // 🔥 ESTA FALTABA
     public function username()
     {
         return 'correo_electronico';
