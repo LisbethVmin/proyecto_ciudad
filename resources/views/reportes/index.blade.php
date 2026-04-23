@@ -49,7 +49,7 @@
                 @endif
 
                 <!-- ADMIN -->
-                @if(auth()->user()->rol == 'admin')
+                @if(auth()->check() && auth()->user()->rol == 'admin')
                     <form method="POST" action="/estado" class="mt-3">
                         @csrf
                         <input type="hidden" name="id_reporte" value="{{ $r->id_reporte }}">
