@@ -1,60 +1,60 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+<body class="bg-black">
 
-        <!-- CORREO -->
-        <div>
-            <x-input-label for="correo_electronico" :value="'Correo electrónico'" />
+<!-- FONDO -->
+<div class="relative h-screen">
 
-            <x-text-input 
-                id="correo_electronico" 
-                class="block mt-1 w-full" 
-                type="email" 
-                name="correo_electronico" 
-                :value="old('correo_electronico')" 
-                required 
-                autofocus 
-            />
+    <img src="{{ asset('img/mi-fondo.jpg') }}"
+         class="absolute w-full h-full object-cover">
 
-            <x-input-error :messages="$errors->get('correo_electronico')" class="mt-2" />
+    <div class="absolute w-full h-full bg-black/50"></div>
+
+    <!-- CONTENIDO -->
+    <div class="relative z-10 flex h-full items-center justify-center">
+
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-[400px]">
+
+            <h2 class="text-2xl font-bold text-center text-[#0f5132] mb-6">
+                Iniciar Sesión
+            </h2>
+
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+
+                <input type="email" name="correo_electronico"
+                    placeholder="Correo electrónico"
+                    class="w-full border p-2 mb-4 rounded"
+                    required>
+
+                <input type="password" name="password"
+                    placeholder="Contraseña"
+                    class="w-full border p-2 mb-4 rounded"
+                    required>
+
+                <button class="w-full bg-[#198754] text-white py-2 rounded-lg font-bold hover:bg-[#146c43]">
+                    Ingresar
+                </button>
+
+            </form>
+
+            <p class="mt-4 text-sm text-center">
+                ¿No tienes cuenta?
+                <a href="{{ route('register') }}" class="text-green-600 font-semibold">
+                    Regístrate
+                </a>
+            </p>
+
         </div>
 
-        <!-- PASSWORD -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="'Contraseña'" />
+    </div>
+</div>
 
-            <x-text-input 
-                id="password" 
-                class="block mt-1 w-full"
-                type="password"
-                name="password"
-                required 
-            />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- RECORDAR -->
-        <div class="block mt-4">
-            <label for="remember" class="inline-flex items-center">
-                <input 
-                    id="remember" 
-                    type="checkbox" 
-                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" 
-                    name="remember"
-                >
-                <span class="ms-2 text-sm text-gray-600">Recordarme</span>
-            </label>
-        </div>
-
-        <!-- BOTÓN -->
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button class="ms-3">
-                Iniciar sesión
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</body>
+</html>
