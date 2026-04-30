@@ -30,7 +30,7 @@
 
         <!-- CREAR REPORTE -->
         <div class="bg-white p-6 rounded-2xl shadow">
-            <h3 class="text-xl font-bold mb-2">📝 Crear Reporte</h3>
+            <h3 class="text-xl font-bold mb-2"> Crear Reporte</h3>
             <p class="text-gray-500 mb-4">Reporta un problema en tu zona</p>
 
             <a href="/crear-reporte" class="bg-green-600 text-white px-4 py-2 rounded">
@@ -40,7 +40,7 @@
 
         <!-- VER REPORTES -->
         <div class="bg-white p-6 rounded-2xl shadow">
-            <h3 class="text-xl font-bold mb-2">📄 Mis Reportes</h3>
+            <h3 class="text-xl font-bold mb-2"> Mis Reportes</h3>
             <p class="text-gray-500 mb-4">Mira el estado de tus reportes</p>
 
             <a href="/reportes" class="bg-blue-600 text-white px-4 py-2 rounded">
@@ -50,7 +50,7 @@
 
         <!-- PERFIL -->
         <div class="bg-white p-6 rounded-2xl shadow">
-            <h3 class="text-xl font-bold mb-2">👤 Mi Perfil</h3>
+            <h3 class="text-xl font-bold mb-2"> Mi Perfil</h3>
             <p class="text-gray-500 mb-4">Editar tus datos</p>
 
             <a href="/profile" class="bg-gray-600 text-white px-4 py-2 rounded">
