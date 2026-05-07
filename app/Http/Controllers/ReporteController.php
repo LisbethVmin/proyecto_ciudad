@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ReporteController extends Controller
 {
+    // LISTAR REPORTES
     public function index()
     {
         $reportes = DB::table('reporte')
@@ -23,35 +25,46 @@ class ReporteController extends Controller
         return view('reportes.index', compact('reportes'));
     }
 
-    public function store()
+    // GUARDAR REPORTE
+   public function store(Request $request)
 {
+    $request->validate([
+        'titulo' => 'required',
+        'descripcion' => 'required',
+        'imagen' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+        'id_tipo' => 'required',
+        'latitud' => 'required',
+        'longitud' => 'required',
+    ]);
+
     $rutaImagen = null;
 
-    if (request()->hasFile('imagen')) {
-        $archivo = request()->file('imagen');
+    // 📸 GUARDAR IMAGEN
+    if ($request->hasFile('imagen')) {
+        $archivo = $request->file('imagen');
         $nombre = time() . "_" . $archivo->getClientOriginalName();
-        $archivo->move(public_path('imagenes'), $nombre);
+        $archivo->move(public_path('img'), $nombre);
         $rutaImagen = $nombre;
     }
 
-    DB::table('reporte')->insert([
-    'titulo' => request('titulo'),
-    'descripcion' => request('descripcion'),
-    'id_usuario' => auth()->user()->id_usuario,
-    'id_estado' => 1,
-    'id_tipo' => request('id_tipo'),
-    'fecha' => now()
-]);
+    // 🧠 GUARDAR REPORTE
+    $idReporte = DB::table('reporte')->insertGetId([
+        'titulo' => $request->titulo,
+        'descripcion' => $request->descripcion,
+        'id_usuario' => auth()->user()->id_usuario,
+        'id_estado' => 1,
+        'id_tipo' => $request->id_tipo,
+        'fecha' => now(),
+        'latitud' => $request->latitud,
+        'longitud' => $request->longitud,
+    ]);
 
-    $idReporte = DB::getPdo()->lastInsertId();
+    // 🖼️ GUARDAR IMAGEN EN TABLA
+    DB::table('imagen')->insert([
+        'ruta_imagen' => $rutaImagen,
+        'id_reporte' => $idReporte
+    ]);
 
-    if ($rutaImagen) {
-        DB::table('imagen')->insert([
-            'ruta_imagen' => $rutaImagen,
-            'id_reporte' => $idReporte
-        ]);
-    }
-
-    return redirect('/reportes');
+    return redirect('/reportes')->with('success', 'Reporte creado correctamente');
 }
 }
