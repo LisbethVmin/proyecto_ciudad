@@ -31,8 +31,8 @@ class LoginRequest extends FormRequest
         $user = \App\Models\User::where('correo_electronico', $this->input('correo_electronico'))->first();
 
         if (!$user) {
-            throw ValidationException::withMessages([
-                'correo_electronico' => 'Usuario no existe',
+           throw ValidationException::withMessages([
+            'correo_electronico' => __('auth.failed'),
             ]);
         }
 
@@ -42,7 +42,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        Auth::login($user);
+        Auth::login($user, $this->boolean('remember'));
 
         RateLimiter::clear($this->throttleKey());
     }
