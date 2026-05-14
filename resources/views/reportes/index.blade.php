@@ -2,7 +2,7 @@
     <div class="max-w-3xl mx-auto px-4 pt-6 pb-24">
         <div class="flex justify-between items-center mb-8">
             <div>
-                <h2 class="text-3xl font-black text-gray-800 tracking-tighter uppercase italic">Lista de Reportes</h2>
+                <h2 class="text-3xl font-black text-gray-800 tracking-tighter uppercase italic">Reportes Urbanos</h2>
                 <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">Santa Cruz de la Sierra</p>
             </div>
             <a href="/crear-reporte" class="hidden md:block bg-[#1f6f5b] text-white px-6 py-3 rounded-2xl font-black text-xs shadow-lg hover:bg-black transition-all">
@@ -11,7 +11,7 @@
         </div>
 
         @forelse($reportes as $r)
-            <div class="bg-white rounded-[2.5rem] p-6 mb-6 shadow-sm border border-gray-100 transition-all">
+            <div class="bg-white rounded-[2.5rem] p-6 mb-8 shadow-sm border border-gray-100 overflow-hidden transition-all">
                 
                 <div class="flex justify-between items-start mb-4">
                     <div class="flex flex-col">
@@ -43,17 +43,19 @@
                     <div class="relative w-full h-56 md:h-80 overflow-hidden rounded-[2rem] mb-5 shadow-inner border border-gray-50">
                         <img src="{{ asset('storage/' . $img->ruta_imagen) }}" 
                              class="absolute w-full h-full object-cover" 
-                             alt="Evidencia">
+                             alt="Evidencia del problema">
                     </div>
                 @endif
 
                 <div class="flex items-center justify-between text-[11px] text-gray-400 font-bold uppercase tracking-wider pb-6 border-b border-gray-50">
-                    <span>📍 Santa Cruz, Bolivia</span>
+                    <div class="flex items-center gap-2">
+                        <span>📍 SCZ: {{ $r->latitud }}, {{ $r->longitud }}</span>
+                    </div>
                     <span>📅 {{ date('d/m/Y', strtotime($r->fecha)) }}</span>
                 </div>
 
                 <div class="mt-6">
-                    <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Conversación</h4>
+                    <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Conversación Ciudadana</h4>
                     
                     <div class="space-y-3 mb-6">
                         @php
@@ -71,12 +73,12 @@
                                     {{ substr($c->user_name, 0, 1) }}
                                 </div>
                                 <div class="bg-gray-50 px-4 py-2 rounded-2xl rounded-tl-none border border-gray-100">
-                                    <p class="text-[10px] font-black text-[#1f6f5b] uppercase">{{ $c->user_name }}</p>
+                                    <p class="text-[10px] font-black text-[#1f6f5b] uppercase tracking-tighter">{{ $c->user_name }}</p>
                                     <p class="text-xs text-gray-600 mt-0.5 leading-snug">{{ $c->contenido }}</p>
                                 </div>
                             </div>
                         @empty
-                            <p class="text-[10px] text-gray-400 italic ml-2">Sin comentarios aún.</p>
+                            <p class="text-[10px] text-gray-400 italic ml-2">No hay comentarios en este reporte aún.</p>
                         @endforelse
                     </div>
 
@@ -84,7 +86,7 @@
                         @csrf
                         <input type="hidden" name="id_reporte" value="{{ $r->id_reporte }}">
                         <input type="text" name="contenido" placeholder="Aportar información..." 
-                               class="flex-1 bg-gray-50 border-none rounded-2xl p-3 text-xs focus:ring-2 focus:ring-[#1f6f5b]" required>
+                               class="flex-1 bg-gray-50 border-none rounded-2xl p-3 text-xs focus:ring-2 focus:ring-[#1f6f5b] placeholder-gray-400" required>
                         <button class="bg-[#1f6f5b] text-white p-3 rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -94,12 +96,12 @@
                 </div>
 
                 @if(auth()->user()->rol == 'admin')
-                    <div class="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
-                        <span class="text-[9px] font-black text-red-400 uppercase tracking-[0.2em]">Gestión Municipal</span>
+                    <div class="mt-8 pt-6 border-t border-gray-100 flex items-center justify-between bg-red-50/30 -mx-6 px-6 pb-2">
+                        <span class="text-[9px] font-black text-red-500 uppercase tracking-[0.2em]">Gestión Municipal</span>
                         <form method="POST" action="/estado" class="flex gap-2">
                             @csrf
                             <input type="hidden" name="id_reporte" value="{{ $r->id_reporte }}">
-                            <select name="id_estado" class="bg-gray-100 border-none rounded-xl text-[10px] font-black uppercase p-2 focus:ring-2 focus:ring-[#1f6f5b]">
+                            <select name="id_estado" class="bg-white border-none rounded-xl text-[10px] font-black uppercase p-2 focus:ring-2 focus:ring-[#1f6f5b] shadow-sm">
                                 <option value="1" {{ $r->id_estado == 1 ? 'selected' : '' }}>Pendiente</option>
                                 <option value="2" {{ $r->id_estado == 2 ? 'selected' : '' }}>En proceso</option>
                                 <option value="3" {{ $r->id_estado == 3 ? 'selected' : '' }}>Solucionado</option>
@@ -113,12 +115,12 @@
         @empty
             <div class="bg-white rounded-[2.5rem] p-12 text-center shadow-sm border border-gray-100">
                 <div class="text-5xl mb-4">🌳</div>
-                <h3 class="text-xl font-bold text-gray-800">No hay reportes todavía</h3>
-                <p class="text-gray-500 text-sm mt-2 leading-relaxed">¡Sé el primero en reportar algo!</p>
+                <h3 class="text-xl font-bold text-gray-800 tracking-tight">¡Ciudad Limpia!</h3>
+                <p class="text-gray-500 text-sm mt-2 leading-relaxed">No se encontraron reportes activos. <br>Si ves un problema, usa el botón "+" para informar.</p>
             </div>
         @endforelse
 
-        <a href="/crear-reporte" class="md:hidden fixed bottom-6 right-6 bg-[#1f6f5b] text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl z-50 animate-bounce">
+        <a href="/crear-reporte" class="md:hidden fixed bottom-6 right-6 bg-[#1f6f5b] text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl z-50 transition-transform active:scale-90 animate-bounce">
             +
         </a>
     </div>
